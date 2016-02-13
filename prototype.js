@@ -1,4 +1,4 @@
-var https = require('https');
+var http = require('http');
 
 var Webpage = function(host){
 	this.host = host;
@@ -11,13 +11,11 @@ Webpage.prototype.get = function(page){
 }
 
 Webpage.prototype.process = function(){	
-	console.log(this.host);
-	console.log(this.page);
-
-	return https.get({
+	var that = this;
+	return http.get({
         	host: this.host,
         	path: this.page,
-		port: 443,
+		port: 80,
 		agent: false,
 		
     	}, function(response) {
@@ -26,15 +24,11 @@ Webpage.prototype.process = function(){
             		body += d;
         	});
         	response.on('end', function() {
-            	// Data reception is done, do whatever with it!
-		console.log(body);
-//            	callback({
-//                	email: parsed.email,
-//                	password: parsed.pass
-//            	});
+            		// Data reception is done, do whatever with it!
+			console.log(body);
         	});
     	});
 }
 
 var google = new Webpage('httpbin.org');
-google.get('ip');
+google.get('/ip');
